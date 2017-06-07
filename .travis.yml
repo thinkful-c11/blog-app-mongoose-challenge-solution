@@ -1,0 +1,11 @@
+language: node_js
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: KE1zMIxMOoLpn6f341ZL7Q9KcAEdFheZ6AMtJuQi/4lXRY0L8DBztAILeShXbUHpitSr79OjD9fqu1utEUhGbsimAYTJw+2YQykUns0PDyxxg891W/WealJvyQygJke+dsGQ59J2zGm5h2o8Mi9zRbcZsTYDfFVUNhfILUp0Cm2VkQH+Es6yrv7LNd6PXvPP7+Ww1ArqJCc9x9h3BfvJjWHLwuLwryKzmR60o6GCWITd826r+9edk352WQiE2O0iKzkxplpKcZBScUeOR9YN0rtKCEEIMm6UyrPQQ8a02gmP1jaW5xB/U9iTt8/W2ZI8GYyYNv7UBhA/dcIohBuM7szUJJ7qd3kCU9OIVn5xbA0xDdv1WQGhpyKFrRODIT43hOvrOou+z3XnPyR0hCTkfeIPWu4nk/2Ox2FNc6TLJTsiTUVfV/VJjYo6Q4ZFI8rNc34Sdeqy5PZRQ7O4OpQoJl2DnYVzOd3Kv1R0OzF7UAHKkT5mWoXv2GQ2cM5ZpjJa/1GIrCoUmtcsLX5VPhReZtSOHiOVvJdpNwuq17IXB9+NHYanB9M4clKtmvWrH8fEBj+amTEm5xtwSSBXEtlmvrWSXDErD3yIDHiGHb4qZCXmxc0IARZGN9+naV39GDIz5suFXBAbw0EOHkY1Ql/BS1/hHOIoytp/LQV9ZbQTwuA=
+  app: aqueous-river-81513
+  on:
+    repo: thinkful-c11/blog-app-mongoose-challenge-solution
