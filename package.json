@@ -8,8 +8,9 @@
     "test": "mocha"
   },
   "dependencies": {
-    "dotenv": "^4.0.0",
     "body-parser": "^1.17.2",
+    "chai-moment": "^0.1.0",
+    "dotenv": "^4.0.0",
     "express": "^4.15.3",
     "mongoose": "^4.10.5",
     "morgan": "^1.8.2",

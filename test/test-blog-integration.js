@@ -10,7 +10,7 @@ const {app, runServer, closeServer} = require('../server');
 const {TEST_DATABASE_URL} = require('../config');
 
 chai.use(chaiHttp);
-
+chai.use(require('chai-moment'));
 function seedBlogData() {
   console.info('seeding blog data');
   const seedData = [];
@@ -29,7 +29,7 @@ function generateBlogData() {
     },
     title: faker.lorem.word(),
     content: faker.lorem.paragraph(),
-    date: faker.date.recent()
+    // date: faker.date.recent()
   };
 }
 
@@ -76,7 +76,29 @@ describe('Blog Post API resource', function() {
 
     it('should return blog posts with right fields', function () {
       let resPost;
-      return;
+      return chai.request(app)
+        .get('/posts')
+        .then(function(res) {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.be.a('array');
+          res.body.should.have.length.of.at.least(1);
+
+          res.body.forEach(function(post) {
+            post.should.be.a('object');
+            post.should.include.keys(
+              'id', 'title', 'author', 'content', 'created');
+          });
+          resPost = res.body[0];
+          return BlogPost.findById(resPost.id);
+        })
+        .then(function(post) {
+
+          resPost.id.should.equal(post.id);
+          resPost.title.should.equal(post.title);
+          resPost.author.should.equal(post.authorName);
+          resPost.created.should.be.sameMoment(post.created);
+        });
     });
   });
 
