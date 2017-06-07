@@ -112,7 +112,7 @@ describe('Blog Post API resource', function() {
 
       const newPost = generateBlogData();
       const _authorName = `${newPost.author.firstName} ${newPost.author.lastName}`.trim();
-      // newPost.created = Date.now();
+      let responseDate;
 
       return chai.request(app)
         .post('/posts')
@@ -127,18 +127,19 @@ describe('Blog Post API resource', function() {
           res.body.title.should.equal(newPost.title);
           res.body.author.should.equal(_authorName);
           res.body.content.should.equal(newPost.content);
-          // console.log(res.body.created);
-          // console.log(newPost.created);
-          // res.body.created.should.be.sameMoment(newPost.created);
+
+          responseDate = res.body.created;
           return BlogPost.findById(res.body.id);
         })
         .then(function(post) {
-          post._authorName = `${post.author.firstName} ${post.author.lastName}`.trim();
-
+          const postAuthor = getAuthorName(post);
+          const newAuthor = getAuthorName(newPost);
+          
           post.title.should.equal(newPost.title);
-          post._authorName.should.equal(_authorName);
+          postAuthor.should.equal(newAuthor);
           post.content.should.equal(newPost.content);
-          // post.created.should.be.sameMoment(newPost.created);
+          // Testing created field on db vs. on res obj.
+          post.created.should.be.sameMoment(responseDate);
         });
     });
   });
