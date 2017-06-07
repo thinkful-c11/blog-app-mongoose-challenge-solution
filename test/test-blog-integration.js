@@ -29,7 +29,7 @@ function generateBlogData() {
     },
     title: faker.lorem.word(),
     content: faker.lorem.paragraph(),
-    // date: faker.date.recent()
+    created: new Date()
   };
 }
 
@@ -98,6 +98,43 @@ describe('Blog Post API resource', function() {
           resPost.title.should.equal(post.title);
           resPost.author.should.equal(post.authorName);
           resPost.created.should.be.sameMoment(post.created);
+        });
+    });
+  });
+
+  describe('POST endpoint', function() {
+
+    it('should add a new blog post', function() {
+
+      const newPost = generateBlogData();
+      const _authorName = `${newPost.author.firstName} ${newPost.author.lastName}`.trim();
+      // newPost.created = Date.now();
+
+      return chai.request(app)
+        .post('/posts')
+        .send(newPost)
+        .then(function(res) {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.include.keys(
+            'id', 'title', 'author', 'content', 'created');
+          res.body.id.should.not.be.null;
+          res.body.title.should.equal(newPost.title);
+          res.body.author.should.equal(_authorName);
+          res.body.content.should.equal(newPost.content);
+          // console.log(res.body.created);
+          // console.log(newPost.created);
+          // res.body.created.should.be.sameMoment(newPost.created);
+          return BlogPost.findById(res.body.id);
+        })
+        .then(function(post) {
+          post._authorName = `${post.author.firstName} ${post.author.lastName}`.trim();
+
+          post.title.should.equal(newPost.title);
+          post._authorName.should.equal(_authorName);
+          post.content.should.equal(newPost.content);
+          // post.created.should.be.sameMoment(newPost.created);
         });
     });
   });
