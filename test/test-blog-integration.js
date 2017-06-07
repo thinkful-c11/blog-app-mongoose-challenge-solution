@@ -57,5 +57,27 @@ describe('Blog Post API resource', function() {
     return closeServer();
   });
 
+  describe('Get endpoint', function() {
+
+    it('should return all existing blog posts', function() {
+      let res;
+      return chai.request(app)
+        .get('/posts')
+        .then(function(_res) {
+          res = _res;
+          res.should.have.status(200);
+          res.body.should.have.length.of.at.least(1);
+          return BlogPost.count();
+        })
+        .then(function(count) {
+          res.body.should.have.lengthOf(count);
+        });
+    });
+
+    it('should return blog posts with right fields', function () {
+      let resPost;
+      return;
+    });
+  });
 
 });
