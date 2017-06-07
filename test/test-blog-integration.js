@@ -38,6 +38,10 @@ function tearDownDb() {
   return mongoose.connection.dropDatabase();
 }
 
+function getAuthorName(obj){
+  return `${obj.author.firstName} ${obj.author.lastName}`.trim();
+}
+
 describe('Blog Post API resource', function() {
 
 
@@ -136,6 +140,42 @@ describe('Blog Post API resource', function() {
           post.content.should.equal(newPost.content);
           // post.created.should.be.sameMoment(newPost.created);
         });
+    });
+  });
+
+  describe('PUT endpoint', function() {
+
+    it('should update field you send over', function() {
+      const updateData = {
+        title: 'fofofofofofof',
+        author: {
+          firstName: 'blah',
+          lastName: 'blergh'
+        },
+        content: 'hahahahahahahahahahahahaha'
+      };
+
+      return BlogPost
+       .findOne()
+       .exec()
+       .then(function(post) {
+         updateData.id = post.id;
+
+         return chai.request(app)
+           .put(`/posts/${post.id}`)
+           .send(updateData);
+       })
+       .then(function(res) {
+         res.should.have.status(204);
+         return BlogPost.findById(updateData.id).exec();
+       })
+       .then(function(post) {
+         const postAuthor = getAuthorName(post);
+         const updateAuthor = getAuthorName(updateData);
+         post.title.should.equal(updateData.title);
+         postAuthor.should.equal(updateAuthor);
+         post.content.should.equal(updateData.content);
+       });
     });
   });
 
